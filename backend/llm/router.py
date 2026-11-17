@@ -65,7 +65,6 @@ def _is_email_request(question: str) -> bool:
     if any(k in text for k in EMAIL_OBJECTS) and has_action:
         return True
 
-    # “把审批单作为附件发送到 xxx@qq.com”不一定包含“邮件/邮箱”字样。
     return bool(EMAIL_ADDRESS_RE.search(text)) and has_action
 
 

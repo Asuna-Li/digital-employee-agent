@@ -1,4 +1,4 @@
-# memory_vectors.py —— 长期记忆：Chroma 向量存储 + 本地模型提炼
+#长期记忆：Chroma 向量存储 + 本地模型提炼
 import json
 import os
 import uuid

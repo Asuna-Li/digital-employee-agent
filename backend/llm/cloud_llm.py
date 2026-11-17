@@ -5,14 +5,12 @@ import os
 
 from dotenv import load_dotenv
 from openai import OpenAI
-
 from backend.privacy.desensitizer import (
     desensitize, has_residual, restore,
 )
 
 load_dotenv()
 
-# 云端模型客户端（DeepSeek 兼容 OpenAI 接口）
 _client = OpenAI(
     api_key=os.getenv("DEEPSEEK_API_KEY"),
     base_url=os.getenv("DEEPSEEK_BASE_URL"),

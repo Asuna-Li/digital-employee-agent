@@ -7,18 +7,18 @@ import chromadb
 
 
 from llama_index.core import (
-    SimpleDirectoryReader,       # 读取目录里的文档
-    VectorStoreIndex,            # 向量索引
-    StorageContext,              # 存储上下文
-    load_index_from_storage,     # 从磁盘加载索引
-    Settings,                    # 全局设置
+    SimpleDirectoryReader,
+    VectorStoreIndex,
+    StorageContext,
+    load_index_from_storage,
+    Settings,
 )
 from llama_index.core.node_parser import (
-    HierarchicalNodeParser,   # 父子分层切分
-    get_leaf_nodes,           # 取出最底层子节点
+    HierarchicalNodeParser,
+    get_leaf_nodes,
     SentenceSplitter,
 )
-from llama_index.core.retrievers import AutoMergingRetriever  # 自动合并检索
+from llama_index.core.retrievers import AutoMergingRetriever
 from llama_index.core.storage.docstore import SimpleDocumentStore
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.readers.file import DocxReader, PDFReader
@@ -27,13 +27,12 @@ from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.llms.ollama import Ollama
 
 
-# 项目根目录：D:\my-agent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DOCS_DIR = os.path.join(BASE_DIR, "docs")        # 原始文档目录
-STORAGE_DIR = os.path.join(BASE_DIR, "storage")  # 索引持久化目录
-CHROMA_DIR = os.path.join(STORAGE_DIR, "chroma")   # Chroma 持久化目录
-COLLECTION_NAME = "knowledge_base"                 # 集合名，相当于“表名”
-LLM_MODEL = "qwen2.5:7b-instruct-q4_K_M"   # 如果用的是别的 tag，改这里
+DOCS_DIR = os.path.join(BASE_DIR, "docs")
+STORAGE_DIR = os.path.join(BASE_DIR, "storage")
+CHROMA_DIR = os.path.join(STORAGE_DIR, "chroma")
+COLLECTION_NAME = "knowledge_base"
+LLM_MODEL = "qwen2.5:7b-instruct-q4_K_M"
 
 
 _LLM = None       # 进程内只加载一次
@@ -52,7 +51,7 @@ def _setup_llm():
             base_url="http://localhost:11434",
             request_timeout=120.0,
             context_window=8192,
-            keep_alive="30m",       # 如果这行报参数错误，删掉它即可
+            keep_alive="30m",
         )
     Settings.llm = _LLM
 
@@ -79,24 +78,22 @@ def _load_documents():
     }
     reader = SimpleDirectoryReader(
         DOCS_DIR,
-        recursive=True,          # 包含子目录
+        recursive=True,
         file_extractor=file_extractor,
     )
     documents = reader.load_data()
 
     for doc in documents:
-        # 取相对路径，例如 hr/员工手册.docx
         path = doc.metadata.get("file_path", "")
         rel = os.path.relpath(path, DOCS_DIR) if path else ""
         parts = rel.replace("\\", "/").split("/")
 
-        # 第一层目录就是部门；根目录文件归 public
         department = parts[0] if len(parts) > 1 else "public"
 
-        doc.metadata["department"] = department          # 部门
-        doc.metadata["security_level"] = "internal"      # 密级：public/internal/secret
-        doc.metadata["doc_status"] = "active"            # 状态：active/expired
-        doc.metadata["source_type"] = "local_file"       # 来源类型
+        doc.metadata["department"] = department
+        doc.metadata["security_level"] = "internal"
+        doc.metadata["doc_status"] = "active"
+        doc.metadata["source_type"] = "local_file"
 
     return documents
 
@@ -104,7 +101,6 @@ def _load_documents():
 def build_or_load_index():
     global _INDEX, _STORAGE_CONTEXT
 
-    # 已经加载过，直接复用
     if _INDEX is not None and _STORAGE_CONTEXT is not None:
         return _INDEX, _STORAGE_CONTEXT
     
@@ -222,8 +218,8 @@ def retrieve(question: str, top_k: int = 6,
                 meta, ["page_label", "page", "page_number", "page_num"], "—"),
             "department": meta.get("department", "unknown"),
             "security_level": meta.get("security_level", "unknown"),
-            "text": content,                  # 完整内容（新增）
-            "snippet": content[:300],         # 展示用摘要
+            "text": content,
+            "snippet": content[:300],
             "score": round(float(item.score or 0.0), 4),
         })
     return results

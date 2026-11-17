@@ -1,4 +1,4 @@
-# main.py —— 桌面客户端：文字问答 + 按键说话 + 本地播报
+#桌面客户端：文字问答 + 按键说话 + 本地播报
 """依赖：PySide6、sounddevice、numpy、requests、piper-tts。"""
 
 import json
@@ -12,9 +12,6 @@ import wave
 import winsound
 import requests
 
-# import numpy as np
-
-# import sounddevice as sd
 
 from voice_frontend import VoiceFrontend
 from PySide6.QtCore import QObject, QUrl, Signal

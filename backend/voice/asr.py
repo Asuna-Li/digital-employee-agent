@@ -6,7 +6,6 @@ import wave
 import numpy as np
 import sherpa_onnx
 
-# 项目根目录：D:\my-agent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 MODEL_DIR = os.path.join(BASE_DIR, "models", "sensevoice")
 
@@ -71,7 +70,7 @@ def transcribe_file(path: str) -> str:
 
     text = _correct(stream.result.text.strip())
 
-    # 少于 2 个汉字，视为噪声/误识别（例如 "The."）
+    # 少于 2 个汉字，视为噪声/误识别
     if len(CJK_PATTERN.findall(text)) < 2:
         return ""
 

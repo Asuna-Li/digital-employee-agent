@@ -4,9 +4,7 @@ import os
 import re
 
 from openai import OpenAI
-
-# 导入即完成工具注册
-from backend.tools import (  # noqa: F401
+from backend.tools import (
     approval_defs,
     dingtalk_defs,
     email_defs,
@@ -72,8 +70,7 @@ def _is_send_request(text: str) -> bool:
     )):
         return True
 
-    # 用户可能只说“作为附件发送到 123@example.com”，
-    # 不一定出现“邮件”两个字，因此要同时识别邮箱地址和发送动作。
+
     return (
         bool(EMAIL_ADDRESS_RE.search(text))
         and any(k in text for k in ("发送", "发到", "发往", "发给", "附件"))
@@ -305,8 +302,7 @@ def run_tool_agent(question: str, history: list = None,
     dingtalk_requested = _is_dingtalk_request(question)
     print(f"[工作流] version={WORKFLOW_VERSION}")
 
-    # “生成文件并发送邮件”是组合任务。先确定需要先执行的生成工具，
-    # 后续由 tool_choice 强制模型按“生成 -> 发邮件确认”的顺序执行。
+
     send_workflow_generator = None
     if send_requested:
         if approval_requested:
@@ -412,8 +408,7 @@ def run_tool_agent(question: str, history: list = None,
                 })
                 continue
 
-            # 本地小模型有时会在工具成功返回后重复调用同一工具。
-            # 相同工具 + 相同参数只执行一次，后续直接复用第一次的真实结果。
+
             call_key = (
                 name,
                 json.dumps(
@@ -531,8 +526,7 @@ def run_tool_agent(question: str, history: list = None,
                 "content": str(result),
             })
 
-            # 组合任务生成成功后，进入独立邮件回合。
-            # 这里不能把“模型回复了一句普通文本”当作邮件步骤完成。
+
             if (
                 send_requested
                 and (

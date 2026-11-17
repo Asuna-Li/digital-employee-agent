@@ -1,12 +1,11 @@
-# memory_store.py —— 短期会话记忆：本地模式落 SQLite，云端模式只留内存
-"""个人单用户场景，不需要 Redis 服务；SQLite 足够且更简单。"""
+#短期会话记忆：本地模式落 SQLite，云端模式只留内存
 
 import os
 import sqlite3
 import threading
 from datetime import datetime
 
-# 项目根目录：D:\my-agent
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_PATH = os.path.join(BASE_DIR, "data", "memory.db")
 os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)

@@ -1,5 +1,4 @@
-# main.py —— 本地服务骨架：REST + WebSocket + 假数据流式回答
-"""阶段 1 目标：不接真实模型，也能把客户端事件链路完整跑通。"""
+#本地服务骨架：REST + WebSocket + 假数据流式回答
 
 import asyncio
 import uuid
@@ -23,8 +22,8 @@ VOICE_TMP = os.path.join(BASE_DIR, "data", "tmp")
 os.makedirs(VOICE_TMP, exist_ok=True)
 
 CONFIG = {
-    "mode": "local",                 # local / cloud
-    "cloud_enabled": False,          # 云端开关
+    "mode": "local",
+    "cloud_enabled": False,
     "docs_dir": "D:/my-agent/docs",
     "local_model": "qwen2.5-7b-awq",
     "embedding_model": "bge-m3",
@@ -77,16 +76,6 @@ async def memory_view():
         "local": ["用户偏好：回答要简洁"],
         "cloud_sanitized": ["用户咨询过流程类问题"],
     }
-
-
-# def _fake_answer(text: str, mode: str) -> str:
-#     """生成一段假回答，用来验证流式与状态机"""
-#     mode_cn = "本地隐私模式" if mode == "local" else "云端增强模式"
-#     return (
-#         f"这是骨架版回答，后端已收到：{text}。"
-#         f"当前运行在{mode_cn}。真实接入后，这里会由 RAG 检索结果生成，"
-#         "并附带文件名、页码和命中片段。"
-#     )
 
 
 def _remember_turn_safe(user_text: str, assistant_text: str,

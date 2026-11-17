@@ -2,7 +2,6 @@
 
 import os
 from datetime import datetime
-
 from docx import Document
 from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -10,12 +9,10 @@ from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
 
 
-# 项目根目录：backend/tools/approval_tools.py 向上三层，即 D:\my-agent
 BASE_DIR = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 )
 
-# 所有审批单统一保存到此目录，避免散落在项目根目录。
 APPROVAL_DIR = os.path.join(BASE_DIR, "data", "approvals")
 os.makedirs(APPROVAL_DIR, exist_ok=True)
 
@@ -26,8 +23,7 @@ def _set_run(run, size: int = 12, bold: bool = False) -> None:
     run.font.size = Pt(size)
     run.bold = bold
 
-    # python-docx 只设置 font.name 时，中文仍可能回退到其他字体。
-    # eastAsia 才能明确指定 Word 中的中文字体。
+
     run_properties = run._element.get_or_add_rPr()
     run_fonts = run_properties.get_or_add_rFonts()
     run_fonts.set(qn("w:eastAsia"), "宋体")
