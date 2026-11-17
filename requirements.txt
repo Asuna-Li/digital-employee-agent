@@ -1,0 +1,40 @@
+# ===== Web 服务 =====
+fastapi==0.141.1
+uvicorn[standard]==0.53.0
+
+# ===== 桌面客户端 =====
+PySide6==6.11.2
+requests==2.34.2
+python-dotenv==1.2.3
+
+# ===== 云端大模型 =====
+openai==3.16.2
+
+# ===== 本地 RAG =====
+llama-index-core==0.14.24
+llama-index-embeddings-huggingface==0.8.0
+llama-index-llms-ollama==0.11.0
+llama-index-readers-file==0.7.0
+llama-index-vector-stores-chroma==0.6.0
+chromadb==1.5.9
+sentence-transformers==6.0.1
+torch==2.14.0
+ollama==0.6.2
+huggingface_hub==1.31.0
+
+# ===== Excel、报表和审批单 =====
+pandas==2.3.3
+openpyxl==3.1.5
+python-docx==1.2.0
+
+# ===== 语音 =====
+sherpa-onnx==1.13.8
+piper-tts==1.8.0
+vosk==0.3.45
+webrtcvad-wheels==2.0.14
+sounddevice==0.5.6
+numpy==2.5.3
+
+# 注意：不要安装 hf-xet。
+# 在本项目的 hf-mirror 下载场景中，它可能导致大模型文件出现 401：
+#   python -m pip uninstall -y hf-xet
